@@ -1,6 +1,4 @@
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 
 public class MyArrayList<T extends Comparable<T>> implements MyList<T> {
     Object[] array = new Object[10];
@@ -38,7 +36,7 @@ public class MyArrayList<T extends Comparable<T>> implements MyList<T> {
 
     @Override
     public T get(int index) {
-        if (index < 0 || index >= size) {
+        if (checkIndex(index)) {
             throw new IndexOutOfBoundsException();
         }
         return (T) array[index];
@@ -53,18 +51,19 @@ public class MyArrayList<T extends Comparable<T>> implements MyList<T> {
     }
 
     @Override
-    public T remove(T element) {
+    public boolean remove(T element) {
         for (int i = 0; i < size; i++) {
             if (array[i].equals(element)) {
                 removeAt(i);
+                return true;
             }
         }
-        return null;
+        return false;
     }
 
     @Override
     public boolean removeAt(int index) {
-        if (index < 0 || index >= size) {
+        if (checkIndex(index)) {
             throw new IndexOutOfBoundsException();
         }
         for (int i = index; i < size - 1; i++) {
@@ -78,8 +77,23 @@ public class MyArrayList<T extends Comparable<T>> implements MyList<T> {
     @Override
     public void addAll(MyArrayList<? extends T> other) {
         for (int i = 0; i < other.size; i++) {
+            ensureCapasity(size + other.size);
             add(other.get(i));
         }
+    }
+
+    public MyArrayList() {
+    }
+
+    private void ensureCapasity(int minCapasity) {
+        if (minCapasity > array.length) {
+            Object[] newArray = new Object[minCapasity];
+            for (int i = 0; i < size; i++) {
+                newArray[i] = array[i];
+            }
+            array = newArray;
+        }
+
     }
 
 
@@ -97,7 +111,11 @@ public class MyArrayList<T extends Comparable<T>> implements MyList<T> {
                 }
             }
         }
+    }
 
-
+    boolean checkIndex(int index) {
+        if (index < 0 || index >= size) {
+            return true;
+        } else return false;
     }
 }

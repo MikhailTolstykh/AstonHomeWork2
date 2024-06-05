@@ -8,7 +8,7 @@ public interface MyList<T> {
 
     boolean removeAt(int index);
 
-    T remove(T element);
+   boolean remove(T element);
 
     void addAll(MyArrayList<? extends T> other);
 
